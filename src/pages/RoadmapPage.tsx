@@ -78,10 +78,10 @@ export const RoadmapPage: React.FC<RoadmapPageProps> = ({
             <span>Ruta Completa A1 → C1 (24 Unidades)</span>
           </div>
           <h1 className="text-lg sm:text-xl font-black mt-0.5">
-            EnglishGo! Dojo • 260+ Lecciones
+            EnglishGo! Dojo • 375+ Lecciones
           </h1>
           <p className="text-xs text-blue-100 mt-0.5">
-            Fonética IPA, Gramática, Vocabulario, Lecturas, Listening y Exámenes de Salto
+            15–16 nodos por unidad • 12 ejercicios por lección con voz nativa
           </p>
         </div>
         <button

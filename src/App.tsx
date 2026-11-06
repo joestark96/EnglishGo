@@ -28,7 +28,7 @@ import '@ionic/react/css/core.css';
 import './theme/global.css';
 
 setupIonicReact({
-  mode: 'md',
+  mode: 'ios',
 });
 
 const DEFAULT_PROFILE: UserProfile = {
@@ -47,10 +47,10 @@ const DEFAULT_PROFILE: UserProfile = {
 };
 
 function computeCEFRLevel(completedLessonsCount: number): CEFRLevel {
-  if (completedLessonsCount >= 180) return 'C1';
-  if (completedLessonsCount >= 120) return 'B2';
-  if (completedLessonsCount >= 70) return 'B1';
-  if (completedLessonsCount >= 30) return 'A2';
+  if (completedLessonsCount >= 260) return 'C1';
+  if (completedLessonsCount >= 180) return 'B2';
+  if (completedLessonsCount >= 100) return 'B1';
+  if (completedLessonsCount >= 40) return 'A2';
   return 'A1';
 }
 
@@ -102,6 +102,16 @@ export const App: React.FC = () => {
     }));
   };
 
+  const syncDarkModeDOM = (isDark: boolean) => {
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+      document.body.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      document.body.classList.remove('dark');
+    }
+  };
+
   useEffect(() => {
     const loadSavedData = async () => {
       await dbService.init();
@@ -110,6 +120,7 @@ export const App: React.FC = () => {
         sound.setDefaultVoice(savedProfile.preferredVoiceId);
       }
       sound.setEnabled(savedProfile.soundEnabled);
+      syncDarkModeDOM(Boolean(savedProfile.darkMode));
       setUserProfile(savedProfile);
 
       const savedProgress = await dbService.getLessonProgress();
@@ -126,14 +137,11 @@ export const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (userProfile.darkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
+    syncDarkModeDOM(Boolean(userProfile.darkMode));
   }, [userProfile.darkMode]);
 
   const handleUpdateProfile = (updated: UserProfile) => {
+    syncDarkModeDOM(Boolean(updated.darkMode));
     setUserProfile(updated);
     dbService.saveUserProfile(updated);
   };
@@ -142,6 +150,11 @@ export const App: React.FC = () => {
     const nextSound = !userProfile.soundEnabled;
     sound.setEnabled(nextSound);
     handleUpdateProfile({ ...userProfile, soundEnabled: nextSound });
+  };
+
+  const handleDarkModeToggle = () => {
+    sound.playTap();
+    handleUpdateProfile({ ...userProfile, darkMode: !userProfile.darkMode });
   };
 
   const handleLoseHeart = () => {
@@ -159,7 +172,7 @@ export const App: React.FC = () => {
   const handleSelectLesson = (lesson: LessonNode, unit: Unit) => {
     setJumpExamNode(null);
     setIsPracticeSession(false);
-    setActiveLesson(expandLessonExercises(lesson, unit));
+    setActiveLesson(expandLessonExercises(lesson, unit, 12));
   };
 
   const handleStartJumpAhead = (targetUnitId: number, targetLessonId?: string) => {
@@ -187,10 +200,10 @@ export const App: React.FC = () => {
 
     if (jumpExamNode) {
       for (const skippedId of jumpExamNode.skippedNodeIds) {
-        await dbService.saveLessonNodeProgress(skippedId, true, 8, 3);
+        await dbService.saveLessonNodeProgress(skippedId, true, 12, 3);
       }
       if (jumpExamNode.targetNodeId) {
-        await dbService.saveLessonNodeProgress(jumpExamNode.targetNodeId, true, 8, 3);
+        await dbService.saveLessonNodeProgress(jumpExamNode.targetNodeId, true, 12, 3);
       }
     } else if (!isPracticeSession) {
       const stars = mistakesMade === 0 ? 3 : mistakesMade <= 2 ? 2 : 1;
@@ -245,6 +258,7 @@ export const App: React.FC = () => {
 
   const handleResetProgress = async () => {
     const freshProfile = await dbService.resetAllData();
+    syncDarkModeDOM(Boolean(freshProfile.darkMode));
     setUserProfile(freshProfile);
     setCurriculum(applySavedProgress(englishCurriculum, {}));
     setFlashcards(initialFlashcards);
@@ -258,84 +272,98 @@ export const App: React.FC = () => {
   const currentCefrLevel = computeCEFRLevel(completedLessonsCount);
 
   return (
-    <IonApp>
-      <TopBar profile={userProfile} onSoundToggle={handleSoundToggle} />
-      <IonContent fullscreen className="bg-slate-50 dark:bg-slate-900">
-        <main>
-          {activeTab === 'roadmap' && (
-            <RoadmapPage
-              curriculum={curriculum}
-              onSelectLesson={handleSelectLesson}
-              onOpenTheory={(unitNum) => {
-                setTheoryTargetUnit(unitNum);
-                setActiveTab('theory');
-              }}
-              onStartJumpAhead={handleStartJumpAhead}
-              onStartPractice={handleStartPractice}
-            />
-          )}
-
-          {activeTab === 'theory' && (
-            <TheoryPage
-              initialUnitNumber={theoryTargetUnit}
-              showIpa={userProfile.showIpa}
-            />
-          )}
-
-          {activeTab === 'flashcards' && (
-            <FlashcardsPage
-              cards={flashcards}
-              showIpa={userProfile.showIpa}
-              onReviewCard={handleReviewCard}
-            />
-          )}
-
-          {activeTab === 'phonetics' && <PhoneticsPage />}
-
-          {activeTab === 'readings' && <ReadingsPage showIpa={userProfile.showIpa} />}
-
-          {activeTab === 'vocabulary' && <VocabularyPage showIpa={userProfile.showIpa} />}
-
-          {activeTab === 'writing' && <WritingPage />}
-
-          {activeTab === 'speaking' && <SpeakingPage showIpa={userProfile.showIpa} />}
-
-          {activeTab === 'mastery' && (
-            <MasteryPage
-              cards={flashcards}
-              showIpa={userProfile.showIpa}
-              onReviewCard={handleReviewCard}
-            />
-          )}
-
-          {activeTab === 'profile' && (
-            <ProfilePage
+    <IonApp className="font-['Nunito',sans-serif]">
+      <IonContent
+        fullscreen
+        className="bg-gray-50 dark:bg-[#131f24] transition-colors duration-200"
+      >
+        <div className="min-h-screen bg-gray-50 dark:bg-[#131f24] text-gray-800 dark:text-gray-100 flex flex-col transition-colors duration-200">
+          {!activeLesson && (
+            <TopBar
               profile={userProfile}
-              completedLessonsCount={completedLessonsCount}
-              currentCefrLevel={currentCefrLevel}
-              onUpdateProfile={handleUpdateProfile}
-              onResetProgress={handleResetProgress}
+              onSoundToggle={handleSoundToggle}
+              onDarkModeToggle={handleDarkModeToggle}
             />
           )}
-        </main>
 
-        {activeLesson && (
-          <QuizModal
-            lesson={activeLesson}
-            userProfile={userProfile}
-            onClose={() => {
-              setActiveLesson(null);
-              setJumpExamNode(null);
-              setIsPracticeSession(false);
-            }}
-            onComplete={handleLessonComplete}
-            onLoseHeart={handleLoseHeart}
-            isJumpAhead={Boolean(jumpExamNode)}
-            isPractice={isPracticeSession}
-          />
-        )}
+          <main className="flex-1">
+            {activeTab === 'roadmap' && (
+              <RoadmapPage
+                curriculum={curriculum}
+                onSelectLesson={handleSelectLesson}
+                onOpenTheory={(unitNum) => {
+                  setTheoryTargetUnit(unitNum);
+                  setActiveTab('theory');
+                }}
+                onStartJumpAhead={handleStartJumpAhead}
+                onStartPractice={handleStartPractice}
+              />
+            )}
+
+            {activeTab === 'theory' && (
+              <TheoryPage
+                initialUnitNumber={theoryTargetUnit}
+                showIpa={userProfile.showIpa}
+              />
+            )}
+
+            {activeTab === 'flashcards' && (
+              <FlashcardsPage
+                cards={flashcards}
+                showIpa={userProfile.showIpa}
+                onReviewCard={handleReviewCard}
+              />
+            )}
+
+            {activeTab === 'phonetics' && <PhoneticsPage />}
+
+            {activeTab === 'readings' && <ReadingsPage showIpa={userProfile.showIpa} />}
+
+            {activeTab === 'vocabulary' && <VocabularyPage showIpa={userProfile.showIpa} />}
+
+            {activeTab === 'writing' && <WritingPage />}
+
+            {activeTab === 'speaking' && <SpeakingPage showIpa={userProfile.showIpa} />}
+
+            {activeTab === 'mastery' && (
+              <MasteryPage
+                cards={flashcards}
+                showIpa={userProfile.showIpa}
+                onReviewCard={handleReviewCard}
+              />
+            )}
+
+            {activeTab === 'profile' && (
+              <ProfilePage
+                profile={userProfile}
+                completedLessonsCount={completedLessonsCount}
+                currentCefrLevel={currentCefrLevel}
+                onUpdateProfile={handleUpdateProfile}
+                onResetProgress={handleResetProgress}
+              />
+            )}
+          </main>
+
+          {activeLesson && (
+            <QuizModal
+              lesson={activeLesson}
+              userProfile={userProfile}
+              onClose={() => {
+                sound.stopSpeech();
+                setActiveLesson(null);
+                setJumpExamNode(null);
+                setIsPracticeSession(false);
+              }}
+              onComplete={handleLessonComplete}
+              onLoseHeart={handleLoseHeart}
+              isJumpAhead={Boolean(jumpExamNode)}
+              isPractice={isPracticeSession}
+            />
+          )}
+
+          {!activeLesson && <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />}
+        </div>
       </IonContent>
-      <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
     </IonApp>
   );
 };

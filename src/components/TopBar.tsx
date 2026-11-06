@@ -1,17 +1,19 @@
 import React from 'react';
-import { Flame, Zap, Heart, Gem, Volume2, VolumeX, GraduationCap } from 'lucide-react';
+import { Flame, Zap, Heart, Gem, Volume2, VolumeX, GraduationCap, Moon, Sun } from 'lucide-react';
 import { UserProfile } from '../types';
 
 interface TopBarProps {
   profile: UserProfile;
   nextHeartMinutes?: number | null;
   onSoundToggle: () => void;
+  onDarkModeToggle?: () => void;
 }
 
 export const TopBar: React.FC<TopBarProps> = ({
   profile,
   nextHeartMinutes,
-  onSoundToggle
+  onSoundToggle,
+  onDarkModeToggle,
 }) => {
   return (
     <header className="sticky top-0 z-30 bg-white dark:bg-[#18272e] border-b-2 border-duo-gray-200 dark:border-[#283842] px-3 py-2 shadow-sm transition-colors duration-200">
@@ -27,19 +29,28 @@ export const TopBar: React.FC<TopBarProps> = ({
         </div>
 
         {/* Racha / Streak */}
-        <div className="flex items-center gap-1.5 font-extrabold text-duo-orange" title="Racha de días estudiados">
+        <div
+          className="flex items-center gap-1.5 font-extrabold text-duo-orange"
+          title="Racha de días estudiados"
+        >
           <Flame className="w-5 h-5 fill-duo-orange" />
           <span className="text-sm tracking-wide">{profile.streakDays}</span>
         </div>
 
         {/* Puntos XP */}
-        <div className="flex items-center gap-1.5 font-extrabold text-duo-yellow-dark" title="Experiencia total">
-          <Zap className="w-5 h-5 fill-duo-yellow text-duo-yellow-dark" />
+        <div
+          className="flex items-center gap-1.5 font-extrabold text-duo-yellow-dark dark:text-duo-yellow"
+          title="Experiencia total"
+        >
+          <Zap className="w-5 h-5 fill-duo-yellow text-duo-yellow-dark dark:text-duo-yellow" />
           <span className="text-sm tracking-wide">{profile.xp} XP</span>
         </div>
 
         {/* Gemas */}
-        <div className="flex items-center gap-1.5 font-extrabold text-duo-blue" title="Gemas disponibles">
+        <div
+          className="flex items-center gap-1.5 font-extrabold text-duo-blue"
+          title="Gemas disponibles"
+        >
           <Gem className="w-5 h-5 fill-duo-blue" />
           <span className="text-sm tracking-wide">{profile.gems}</span>
         </div>
@@ -64,19 +75,36 @@ export const TopBar: React.FC<TopBarProps> = ({
           );
         })()}
 
-        {/* Sonido Toggle */}
-        <button
-          onClick={onSoundToggle}
-          className="p-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors cursor-pointer"
-          aria-label={profile.soundEnabled ? 'Silenciar sonidos' : 'Activar sonidos'}
-          title={profile.soundEnabled ? 'Silenciar sonidos' : 'Activar sonidos'}
-        >
-          {profile.soundEnabled ? (
-            <Volume2 className="w-5 h-5 text-duo-green" />
-          ) : (
-            <VolumeX className="w-5 h-5 text-gray-400" />
+        {/* Controles rápidos: Modo Oscuro + Sonido */}
+        <div className="flex items-center gap-1">
+          {onDarkModeToggle && (
+            <button
+              onClick={onDarkModeToggle}
+              className="p-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-amber-300 transition-colors cursor-pointer"
+              aria-label={profile.darkMode ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+              title={profile.darkMode ? 'Modo Claro' : 'Modo Oscuro'}
+            >
+              {profile.darkMode ? (
+                <Sun className="w-5 h-5 text-amber-400" />
+              ) : (
+                <Moon className="w-5 h-5 text-slate-600" />
+              )}
+            </button>
           )}
-        </button>
+
+          <button
+            onClick={onSoundToggle}
+            className="p-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 transition-colors cursor-pointer"
+            aria-label={profile.soundEnabled ? 'Silenciar sonidos' : 'Activar sonidos'}
+            title={profile.soundEnabled ? 'Silenciar sonidos' : 'Activar sonidos'}
+          >
+            {profile.soundEnabled ? (
+              <Volume2 className="w-5 h-5 text-duo-green" />
+            ) : (
+              <VolumeX className="w-5 h-5 text-gray-400" />
+            )}
+          </button>
+        </div>
       </div>
     </header>
   );

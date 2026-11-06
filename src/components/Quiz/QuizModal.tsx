@@ -94,7 +94,7 @@ export const QuizModal: React.FC<QuizModalProps> = ({
 
   if (!currentExercise && !isFinished) {
     return (
-      <div className="fixed inset-0 bg-white dark:bg-gray-900 z-50 flex flex-col items-center justify-center p-6">
+      <div className="fixed inset-0 bg-white dark:bg-[#131f24] z-[100] flex flex-col items-center justify-center p-6">
         <p className="text-xl text-gray-600 dark:text-gray-300 mb-4">
           Esta lección aún no tiene ejercicios configurados.
         </p>
@@ -201,7 +201,7 @@ export const QuizModal: React.FC<QuizModalProps> = ({
       Math.round(((exercises.length - mistakes) / Math.max(1, exercises.length)) * 100)
     );
     return (
-      <div className="fixed inset-0 bg-white dark:bg-gray-900 z-50 flex flex-col items-center justify-center p-6 animate-fade-in">
+      <div className="fixed inset-0 bg-white dark:bg-[#131f24] z-[100] flex flex-col items-center justify-center p-6 animate-fade-in">
         <div className="w-28 h-28 bg-duo-yellow/20 rounded-full flex items-center justify-center mb-6 animate-bounce">
           <Award className="w-16 h-16 text-duo-yellow fill-duo-yellow" />
         </div>
@@ -218,12 +218,12 @@ export const QuizModal: React.FC<QuizModalProps> = ({
 
         <div className="grid grid-cols-2 gap-4 w-full max-w-sm mb-8">
           <div className="bg-duo-yellow/10 border-2 border-duo-yellow rounded-2xl p-4 text-center">
-            <div className="text-xs font-bold uppercase text-duo-yellow-dark mb-1">XP Ganada</div>
-            <div className="text-2xl font-black text-duo-yellow-dark">+{xpReward} XP</div>
+            <div className="text-xs font-bold uppercase text-duo-yellow-dark dark:text-duo-yellow mb-1">XP Ganada</div>
+            <div className="text-2xl font-black text-duo-yellow-dark dark:text-duo-yellow">+{xpReward} XP</div>
           </div>
           <div className="bg-duo-green/10 border-2 border-duo-green rounded-2xl p-4 text-center">
-            <div className="text-xs font-bold uppercase text-duo-green-dark mb-1">Precisión</div>
-            <div className="text-2xl font-black text-duo-green-dark">{accuracy}%</div>
+            <div className="text-xs font-bold uppercase text-duo-green-dark dark:text-duo-green mb-1">Precisión</div>
+            <div className="text-2xl font-black text-duo-green-dark dark:text-duo-green">{accuracy}%</div>
           </div>
         </div>
 
@@ -239,7 +239,7 @@ export const QuizModal: React.FC<QuizModalProps> = ({
 
   if (!isJumpAhead && !isPractice && userProfile.hearts <= 0) {
     return (
-      <div className="fixed inset-0 bg-white dark:bg-gray-900 z-50 flex flex-col items-center justify-center p-6 text-center">
+      <div className="fixed inset-0 bg-white dark:bg-[#131f24] z-[100] flex flex-col items-center justify-center p-6 text-center">
         <Heart className="w-20 h-20 text-duo-red mb-4 animate-pulse" />
         <h2 className="text-2xl font-extrabold text-gray-800 dark:text-white mb-2">
           ¡Te quedaste sin vidas!
@@ -260,7 +260,7 @@ export const QuizModal: React.FC<QuizModalProps> = ({
 
   if (isJumpAhead && mistakes > 3) {
     return (
-      <div className="fixed inset-0 bg-white dark:bg-gray-900 z-50 flex flex-col items-center justify-center p-6 text-center">
+      <div className="fixed inset-0 bg-white dark:bg-[#131f24] z-[100] flex flex-col items-center justify-center p-6 text-center">
         <ShieldAlert className="w-20 h-20 text-duo-red mb-4 animate-bounce" />
         <h2 className="text-2xl font-extrabold text-gray-800 dark:text-white mb-2">
           ¡Examen de Salto No Superado!
@@ -291,9 +291,9 @@ export const QuizModal: React.FC<QuizModalProps> = ({
         matchedPairIds.length < (currentExercise.pairs?.length || 0);
 
   return (
-    <div className="fixed inset-0 bg-white dark:bg-gray-900 z-50 flex flex-col justify-between overflow-y-auto">
+    <div className="fixed inset-0 bg-white dark:bg-[#131f24] dark:text-gray-100 z-[100] flex flex-col justify-between overflow-y-auto">
       {/* Top Progress Bar */}
-      <div className="max-w-2xl w-full mx-auto px-4 pt-6 pb-2 flex items-center gap-4">
+      <div className="max-w-2xl w-full mx-auto px-4 pt-5 pb-3 flex items-center gap-4 border-b border-gray-200 dark:border-[#283842] bg-white dark:bg-[#18272e]">
         <button
           onClick={onClose}
           aria-label="Cerrar lección"

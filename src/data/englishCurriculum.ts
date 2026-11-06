@@ -2503,6 +2503,91 @@ function buildUnitFromBlueprint(bp: UnitBlueprint): Unit {
     });
   });
 
+  // Extra Node A: Pronunciación, Ritmo y Connected Speech
+  const pronTopic = bp.grammarTopics[bp.grammarTopics.length - 1] || bp.grammarTopics[0];
+  const pronNodeIdx = nodes.length + 1;
+  nodes.push({
+    id: `u${bp.id}-node-${pronNodeIdx}`,
+    unitId: bp.id,
+    lessonNumber: bp.id,
+    title: 'Pronunciación, Ritmo y Connected Speech',
+    englishTitle: 'Pronunciation & Natural Linking Lab',
+    description: 'Entrena el enlace de palabras, entonación y sonidos clave de esta unidad.',
+    icon: 'Mic',
+    color: 'blue',
+    totalSteps: 12,
+    unlocked: false,
+    completedSteps: 0,
+    stars: 0,
+    exercises: [
+      {
+        id: `ex-u${bp.id}-pron-1`,
+        type: 'listening',
+        prompt: 'Escucha la pronunciación fluida y selecciona la oración exacta:',
+        promptSub: bp.dialogueLines[0]?.ipa,
+        englishVoiceText: bp.dialogueLines[0]?.english || pronTopic.mcVoice,
+        options: [
+          { id: 'pr-c', text: bp.dialogueLines[0]?.english || pronTopic.mcVoice, isCorrect: true },
+          { id: 'pr-d1', text: bp.dialogueLines[1]?.english || 'Could you repeat that slower?', isCorrect: false },
+          { id: 'pr-d2', text: pronTopic.wordOrderTarget.join(' '), isCorrect: false },
+          { id: 'pr-d3', text: bp.dialogueLines[2]?.english || 'Let us check the schedule.', isCorrect: false }
+        ],
+        correctAnswerId: 'pr-c',
+        explanation: `En inglés hablado natural se enlazan las palabras: "${bp.dialogueLines[0]?.english}".`
+      },
+      {
+        id: `ex-u${bp.id}-pron-2`,
+        type: 'match-pairs',
+        prompt: 'Empareja cada expresión hablada con su traducción:',
+        pairs: pronTopic.pairItems,
+        explanation: pronTopic.mcExplanation
+      }
+    ]
+  });
+
+  // Extra Node B: Errores Comunes de Hispanohablantes (Common Mistakes)
+  const mistakeTopic = bp.grammarTopics[1] || bp.grammarTopics[0];
+  const mistakeNodeIdx = nodes.length + 1;
+  nodes.push({
+    id: `u${bp.id}-node-${mistakeNodeIdx}`,
+    unitId: bp.id,
+    lessonNumber: bp.id,
+    title: 'Errores Comunes de Hispanohablantes',
+    englishTitle: 'Common Mistakes & False Friends',
+    description: 'Evita las traducciones literales del español y domina la forma nativa.',
+    icon: 'ShieldAlert',
+    color: 'orange',
+    totalSteps: 12,
+    unlocked: false,
+    completedSteps: 0,
+    stars: 0,
+    exercises: [
+      {
+        id: `ex-u${bp.id}-mist-1`,
+        type: 'multiple-choice',
+        prompt: `Evita el error común: ${mistakeTopic.mcQuestion}`,
+        englishVoiceText: mistakeTopic.mcVoice,
+        options: [
+          { id: 'ms-c', text: mistakeTopic.mcCorrect, isCorrect: true },
+          { id: 'ms-d1', text: mistakeTopic.mcDistractors[0], isCorrect: false },
+          { id: 'ms-d2', text: mistakeTopic.mcDistractors[1], isCorrect: false },
+          { id: 'ms-d3', text: mistakeTopic.mcDistractors[2], isCorrect: false }
+        ],
+        correctAnswerId: 'ms-c',
+        explanation: mistakeTopic.mcExplanation
+      },
+      {
+        id: `ex-u${bp.id}-mist-2`,
+        type: 'word-order',
+        prompt: mistakeTopic.wordOrderPrompt,
+        englishVoiceText: mistakeTopic.wordOrderTarget.join(' '),
+        wordBank: [...mistakeTopic.wordOrderTarget, ...mistakeTopic.wordOrderDistractors],
+        correctSentence: mistakeTopic.wordOrderTarget,
+        explanation: mistakeTopic.wordOrderExplanation
+      }
+    ]
+  });
+
   // Reading Passage Node (Lectura del Libro)
   const readingNodeIdx = nodes.length + 1;
   nodes.push({
@@ -2514,7 +2599,7 @@ function buildUnitFromBlueprint(bp: UnitBlueprint): Unit {
     description: 'Lee el pasaje en inglés, escucha su narración y responde preguntas de comprensión.',
     icon: 'BookOpen',
     color: 'purple',
-    totalSteps: 3,
+    totalSteps: 12,
     unlocked: false,
     completedSteps: 0,
     stars: 0,
@@ -2537,6 +2622,32 @@ function buildUnitFromBlueprint(bp: UnitBlueprint): Unit {
     ]
   });
 
+  // Workbook: Construcción de Oraciones Node
+  const sentenceNodeIdx = nodes.length + 1;
+  nodes.push({
+    id: `u${bp.id}-node-${sentenceNodeIdx}`,
+    unitId: bp.id,
+    lessonNumber: bp.id,
+    title: 'Workbook: Construcción de Oraciones',
+    englishTitle: 'Sentence Structure & Word Order Lab',
+    description: 'Practica el orden sintáctico exacto en afirmaciones, negaciones y preguntas.',
+    icon: 'Flame',
+    color: 'green',
+    totalSteps: 12,
+    unlocked: false,
+    completedSteps: 0,
+    stars: 0,
+    exercises: bp.grammarTopics.slice(0, 4).map((t, tIdx) => ({
+      id: `ex-u${bp.id}-wb-wo-${tIdx}`,
+      type: 'word-order' as const,
+      prompt: t.wordOrderPrompt,
+      englishVoiceText: t.wordOrderTarget.join(' '),
+      wordBank: [...t.wordOrderTarget, ...t.wordOrderDistractors],
+      correctSentence: t.wordOrderTarget,
+      explanation: t.wordOrderExplanation
+    }))
+  });
+
   // Workbook: Práctica Auditiva Node
   const listenNodeIdx = nodes.length + 1;
   nodes.push({
@@ -2548,7 +2659,7 @@ function buildUnitFromBlueprint(bp: UnitBlueprint): Unit {
     description: 'Entrena tu comprensión auditiva con las estructuras de esta unidad.',
     icon: 'Headphones',
     color: 'orange',
-    totalSteps: 4,
+    totalSteps: 12,
     unlocked: false,
     completedSteps: 0,
     stars: 0,
@@ -2575,12 +2686,12 @@ function buildUnitFromBlueprint(bp: UnitBlueprint): Unit {
     id: `u${bp.id}-node-${finalNodeIdx}`,
     unitId: bp.id,
     lessonNumber: bp.id,
-    title: `Workbook: Integración Unidad ${bp.id}`,
-    englishTitle: `Unit ${bp.id} Mastery Review`,
+    title: `Examen Integrador Unidad ${bp.id}`,
+    englishTitle: `Unit ${bp.id} Mastery Exam`,
     description: 'Integra vocabulario, gramática, escucha y orden de oraciones de toda la unidad.',
     icon: 'Award',
     color: 'red',
-    totalSteps: 4,
+    totalSteps: 12,
     unlocked: false,
     completedSteps: 0,
     stars: 0,
@@ -2618,14 +2729,16 @@ function buildUnitFromBlueprint(bp: UnitBlueprint): Unit {
 
 function expandAdditionalSpecToBlueprint(spec: (typeof ADDITIONAL_UNIT_SPECS)[number]): UnitBlueprint {
   const baseTopics = spec.topics;
-  // Expand to 6 rich grammar/skill topics per unit so every single unit has 10-11 serpentine nodes!
+  // Expand to 8 rich grammar/skill topics per unit so every single unit has 16 serpentine nodes!
   const subThemes = [
     { suffix: 'Estructuras Base y Reglas', icon: 'BookOpen', color: 'blue' as const },
     { suffix: 'Negación, Contraste y Matices', icon: 'ShieldAlert', color: 'orange' as const },
     { suffix: 'Preguntas Directas e Indirectas', icon: 'HelpCircle', color: 'purple' as const },
     { suffix: 'Expresiones Coloquiales y Phrasal Verbs', icon: 'Flame', color: 'red' as const },
     { suffix: 'Inglés Profesional y Situaciones Reales', icon: 'Briefcase', color: 'green' as const },
-    { suffix: 'Pronunciación, Ritmo y Connected Speech', icon: 'Mic', color: 'blue' as const }
+    { suffix: 'Collocations y Fluidez Conversacional', icon: 'MessageCircle', color: 'purple' as const },
+    { suffix: 'Comprensión en Contexto Real', icon: 'Compass', color: 'blue' as const },
+    { suffix: 'Práctica Intensiva de Gramática', icon: 'Award', color: 'orange' as const }
   ];
 
   const expandedTopics: UnitBlueprint['grammarTopics'] = subThemes.map((theme, idx) => {
