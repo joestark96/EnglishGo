@@ -1,5 +1,16 @@
 import React from 'react';
-import { Flame, Zap, Heart, Gem, Volume2, VolumeX, GraduationCap, Moon, Sun } from 'lucide-react';
+import {
+  Flame,
+  Zap,
+  Heart,
+  Gem,
+  Volume2,
+  VolumeX,
+  GraduationCap,
+  Moon,
+  Sun,
+  Download,
+} from 'lucide-react';
 import { UserProfile } from '../types';
 
 interface TopBarProps {
@@ -7,6 +18,7 @@ interface TopBarProps {
   nextHeartMinutes?: number | null;
   onSoundToggle: () => void;
   onDarkModeToggle?: () => void;
+  onOpenLanding?: () => void;
 }
 
 export const TopBar: React.FC<TopBarProps> = ({
@@ -14,19 +26,25 @@ export const TopBar: React.FC<TopBarProps> = ({
   nextHeartMinutes,
   onSoundToggle,
   onDarkModeToggle,
+  onOpenLanding,
 }) => {
   return (
     <header className="sticky top-0 z-30 bg-white dark:bg-[#18272e] border-b-2 border-duo-gray-200 dark:border-[#283842] px-3 py-2 shadow-sm transition-colors duration-200">
       <div className="max-w-3xl mx-auto flex items-center justify-between gap-2">
         {/* App Brand Logo */}
-        <div className="flex items-center gap-1.5">
+        <button
+          type="button"
+          onClick={onOpenLanding}
+          className="flex items-center gap-1.5 text-left hover:opacity-85 transition-opacity cursor-pointer"
+          title="Ver página de descarga APK / Landing Page"
+        >
           <div className="w-7 h-7 rounded-lg bg-duo-blue flex items-center justify-center text-white shadow-sm flex-shrink-0">
             <GraduationCap className="w-4 h-4 stroke-[2.5px]" />
           </div>
           <span className="hidden sm:inline text-xs font-black tracking-tight text-gray-800 dark:text-gray-100">
             English<span className="text-duo-blue">Go!</span>
           </span>
-        </div>
+        </button>
 
         {/* Racha / Streak */}
         <div
@@ -75,8 +93,20 @@ export const TopBar: React.FC<TopBarProps> = ({
           );
         })()}
 
-        {/* Controles rápidos: Modo Oscuro + Sonido */}
+        {/* Controles rápidos: Descargar APK + Modo Oscuro + Sonido */}
         <div className="flex items-center gap-1">
+          {onOpenLanding && (
+            <button
+              type="button"
+              onClick={onOpenLanding}
+              className="flex items-center gap-1 px-2 py-1 rounded-xl bg-duo-green/15 hover:bg-duo-green/25 text-duo-green text-[11px] font-black transition-colors cursor-pointer"
+              title="Descargar APK para Android"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span className="hidden md:inline">APK</span>
+            </button>
+          )}
+
           {onDarkModeToggle && (
             <button
               onClick={onDarkModeToggle}

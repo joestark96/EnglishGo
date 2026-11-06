@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { IonApp, IonContent, setupIonicReact } from '@ionic/react';
+import { Capacitor } from '@capacitor/core';
 import { TopBar } from './components/TopBar';
 import { BottomNav, NavTab } from './components/BottomNav';
 import { RoadmapPage } from './pages/RoadmapPage';
@@ -12,6 +13,7 @@ import { WritingPage } from './pages/WritingPage';
 import { SpeakingPage } from './pages/SpeakingPage';
 import { MasteryPage } from './pages/MasteryPage';
 import { ProfilePage } from './pages/ProfilePage';
+import { LandingPage } from './pages/LandingPage';
 import { QuizModal } from './components/Quiz/QuizModal';
 import { dbService, SavedLessonProgress } from './services/db';
 import { englishCurriculum } from './data/englishCurriculum';
@@ -55,6 +57,16 @@ function computeCEFRLevel(completedLessonsCount: number): CEFRLevel {
 }
 
 export const App: React.FC = () => {
+  const isNativePlatform = Capacitor.isNativePlatform();
+  const [viewMode, setViewMode] = useState<'app' | 'landing'>(() => {
+    if (isNativePlatform) return 'app';
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('mode') === 'app') return 'app';
+    if (params.get('mode') === 'landing') return 'landing';
+    const saved = localStorage.getItem('englishgo_view_mode');
+    return saved === 'app' ? 'app' : 'landing';
+  });
+
   const [activeTab, setActiveTab] = useState<NavTab>('roadmap');
   const [userProfile, setUserProfile] = useState<UserProfile>(DEFAULT_PROFILE);
   const [curriculum, setCurriculum] = useState<Unit[]>(englishCurriculum);
@@ -64,6 +76,16 @@ export const App: React.FC = () => {
 
   const [jumpExamNode, setJumpExamNode] = useState<JumpAheadLessonNode | null>(null);
   const [isPracticeSession, setIsPracticeSession] = useState(false);
+
+  const handleEnterApp = () => {
+    localStorage.setItem('englishgo_view_mode', 'app');
+    setViewMode('app');
+  };
+
+  const handleOpenLanding = () => {
+    localStorage.setItem('englishgo_view_mode', 'landing');
+    setViewMode('landing');
+  };
 
   const applySavedProgress = (
     baseUnits: Unit[],
@@ -271,6 +293,16 @@ export const App: React.FC = () => {
   );
   const currentCefrLevel = computeCEFRLevel(completedLessonsCount);
 
+  if (viewMode === 'landing' && !isNativePlatform) {
+    return (
+      <IonApp className="font-['Nunito',sans-serif]">
+        <IonContent fullscreen className="bg-slate-950">
+          <LandingPage onEnterApp={handleEnterApp} />
+        </IonContent>
+      </IonApp>
+    );
+  }
+
   return (
     <IonApp className="font-['Nunito',sans-serif]">
       <IonContent
@@ -283,6 +315,7 @@ export const App: React.FC = () => {
               profile={userProfile}
               onSoundToggle={handleSoundToggle}
               onDarkModeToggle={handleDarkModeToggle}
+              onOpenLanding={!isNativePlatform ? handleOpenLanding : undefined}
             />
           )}
 
