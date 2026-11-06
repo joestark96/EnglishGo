@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light dark;
+  --app-bg: light-dark(#f8fafc, #0f172a);
+  --app-surface: light-dark(#ffffff, #1e293b);
+  --app-surface-elevated: light-dark(#f1f5f9, #334155);
+  --app-text: light-dark(#0f172a, #f8fafc);
+  --app-text-muted: light-dark(#475569, #94a3b8);
+  --app-border: light-dark(#e2e8f0, #334155);
+  --app-accent: #58cc02;
+  --app-accent-dark: #46a302;
+  --app-secondary: #1cb0f6;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--app-bg);
+  color: var(--app-text);
+  font-family: 'Nunito', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Clear focus indicators for keyboard navigation */
+:focus-visible {
+  outline: 3px solid var(--app-secondary);
+  outline-offset: 2px;
+}
+
+/* Screen-reader only utility */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out;
+}
