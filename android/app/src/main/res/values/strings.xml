@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">EnglishGo! Dojo</string>
-    <string name="title_activity_main">EnglishGo! Dojo</string>
+    <string name="app_name">EnglishGo!</string>
+    <string name="title_activity_main">EnglishGo!</string>
     <string name="package_name">com.englishgodojo.app</string>
     <string name="custom_url_scheme">com.englishgodojo.app</string>
 </resources>

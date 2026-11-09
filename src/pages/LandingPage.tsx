@@ -27,8 +27,8 @@ interface LandingPageProps {
 export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
   const [downloadStarted, setDownloadStarted] = useState(false);
 
-  // Ruta directa al APK compilado en public/downloads/englishgo-dojo-v1.0.apk
-  const apkUrl = './downloads/englishgo-dojo-v1.0.apk';
+  // Ruta directa al APK compilado en public/downloads/englishgo-v1.0.apk
+  const apkUrl = './downloads/englishgo-v1.0.apk';
 
   const handleDownloadClick = () => {
     setDownloadStarted(true);
@@ -46,7 +46,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
             </div>
             <div>
               <span className="font-black text-xl tracking-tight text-white">
-                EnglishGo! <span className="text-duo-green">Dojo</span>
+                English<span className="text-duo-green">Go!</span>
               </span>
               <span className="hidden sm:inline-block ml-2 text-[11px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-duo-green/15 text-duo-green border border-duo-green/30">
                 v1.0 Oficial (A1–C1)
@@ -64,7 +64,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
             </button>
             <a
               href={apkUrl}
-              download="englishgo-dojo-v1.0.apk"
+              download="englishgo-v1.0.apk"
               onClick={handleDownloadClick}
               className="flex items-center gap-2 px-4 py-2 rounded-xl font-extrabold text-xs sm:text-sm bg-duo-green hover:bg-emerald-500 text-white shadow-lg shadow-duo-green/25 transition-all"
             >
@@ -92,7 +92,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
             <h1 className="text-4xl sm:text-6xl font-black tracking-tight leading-[1.1]">
               Domina el inglés con{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-sky-400 to-indigo-400">
-                EnglishGo! Dojo
+                EnglishGo!
               </span>{' '}
               en tu Android
             </h1>
@@ -107,7 +107,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
             <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
               <a
                 href={apkUrl}
-                download="englishgo-dojo-v1.0.apk"
+                download="englishgo-v1.0.apk"
                 onClick={handleDownloadClick}
                 className="w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-black text-lg bg-gradient-to-r from-duo-green to-emerald-500 hover:from-emerald-500 hover:to-duo-green text-white shadow-xl shadow-duo-green/30 border-b-4 border-emerald-700 active:translate-y-0.5 transition-all"
               >
@@ -135,8 +135,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                 <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
                 <div>
                   ¡Descarga iniciada! Una vez descargado el archivo{' '}
-                  <code className="text-white font-black">englishgo-dojo-v1.0.apk</code>, ábrelo en
-                  tu teléfono Android para instalarlo.
+                  <code className="text-white font-black">englishgo-v1.0.apk</code>, ábrelo en tu
+                  teléfono Android para instalarlo.
                 </div>
               </div>
             )}
@@ -273,8 +273,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
             Todo lo que incluye la versión Android (APK)
           </h2>
           <p className="text-slate-400 font-semibold mt-3">
-            Diseñado con la misma arquitectura gamificada de NihonGo! Dojo, adaptado al inglés
-            internacional con estándares Cambridge & Oxford.
+            Diseñado con arquitectura gamificada e interactiva, adaptado al inglés internacional con
+            estándares Cambridge & Oxford.
           </p>
         </div>
 
@@ -368,8 +368,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
               <h4 className="font-black text-lg mb-2">Descarga el APK</h4>
               <p className="text-slate-400 text-sm font-semibold">
                 Pulsa el botón verde <strong>&ldquo;Descargar APK Gratis&rdquo;</strong> para
-                guardar el instalador{' '}
-                <code className="text-slate-200">englishgo-dojo-v1.0.apk</code> en tu dispositivo.
+                guardar el instalador <code className="text-slate-200">englishgo-v1.0.apk</code> en
+                tu dispositivo.
               </p>
             </div>
 
@@ -389,10 +389,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
               <div className="w-8 h-8 rounded-full bg-amber-400 text-slate-950 font-black flex items-center justify-center mb-4">
                 3
               </div>
-              <h4 className="font-black text-lg mb-2">¡Empieza a entrenar!</h4>
+              <h4 className="font-black text-lg mb-2">¡Empieza a aprender!</h4>
               <p className="text-slate-400 text-sm font-semibold">
-                Abre <strong>EnglishGo! Dojo</strong> desde tu cajón de aplicaciones. Tu racha,
-                gemas y progreso se guardarán automáticamente en tu teléfono.
+                Abre <strong>EnglishGo!</strong> desde tu cajón de aplicaciones. Tu racha, gemas y
+                progreso se guardarán automáticamente en tu teléfono.
               </p>
             </div>
           </div>
@@ -404,17 +404,17 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
                 Especificaciones del Paquete Android
               </div>
               <div className="text-lg font-black text-white">
-                englishgo-dojo-v1.0.apk • Paquete: com.englishgodojo.app
+                englishgo-v1.0.apk • Aplicación Oficial Android
               </div>
               <div className="text-xs font-bold text-slate-400">
-                Requiere Android 7.0 (Nougat) o superior • Motor Ionic 8 + Capacitor 6 •Modo Oscuro
+                Requiere Android 7.0 (Nougat) o superior • Motor Ionic 8 + Capacitor 6 • Modo Oscuro
                 y Claro
               </div>
             </div>
 
             <a
               href={apkUrl}
-              download="englishgo-dojo-v1.0.apk"
+              download="englishgo-v1.0.apk"
               onClick={handleDownloadClick}
               className="shrink-0 flex items-center gap-2.5 px-6 py-3.5 rounded-2xl font-black text-sm bg-duo-green hover:bg-emerald-500 text-white shadow-lg shadow-duo-green/25 transition-all"
             >
@@ -429,7 +429,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterApp }) => {
       <footer className="py-10 px-4 sm:px-8 border-t border-slate-900 text-center text-xs sm:text-sm font-bold text-slate-500">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <span className="text-white font-black">EnglishGo! Dojo</span>
+            <span className="text-white font-black">EnglishGo!</span>
             <span>•</span>
             <span>Plataforma Interactiva de Inglés A1–C1</span>
           </div>

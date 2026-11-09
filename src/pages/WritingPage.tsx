@@ -46,7 +46,7 @@ export const WritingPage: React.FC = () => {
         <div>
           <h1 className="text-2xl font-extrabold text-gray-800 dark:text-white flex items-center gap-2">
             <PenTool className="w-6 h-6 text-duo-orange" />
-            Dojo de Spelling y Dictado en Inglés
+            Taller de Spelling y Dictado en Inglés
           </h1>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             Escucha la pronunciación y escribe correctamente en inglés sin errores ortográficos.
